@@ -9,6 +9,8 @@ services:
       - POSTGRES_DB=geolocalia
     ports:
       - 54329:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
   pgadmin:
       image: dpage/pgadmin4
       environment:
@@ -18,6 +20,8 @@ services:
         - "801:80"
       depends_on:
         - postgres
+      volumes:
+        - pgadmin:/var/lib/postgresql/data
   fastapi:
     restart: always
     build:
@@ -29,7 +33,10 @@ services:
     environment:
       DEBUG: 1
     volumes:
-    - ./:/usr/src/app
+      - ./:/usr/src/app
 networks:
   default:
     driver: bridge
+volumes:
+  pgdata:
+  pgadmin:
