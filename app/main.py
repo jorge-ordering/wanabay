@@ -1,9 +1,8 @@
-from typing import Optional
-
+from re import A
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.api.api import api_router
 
-@app.get("/")
-def read_root():
-    return {"Hello": "Jorge"}
+app = FastAPI(title="Wanna Bay")
+
+app.include_router(api_router)

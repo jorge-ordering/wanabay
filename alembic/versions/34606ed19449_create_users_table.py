@@ -1,7 +1,7 @@
 """create_users_table
 
 Revision ID: 34606ed19449
-Revises: 
+Revises:
 Create Date: 2022-03-12 21:57:11.205452
 
 """
@@ -18,11 +18,14 @@ depends_on = None
 
 def upgrade():
     op.create_table(
-        'account',
-        sa.Column('id', sa.Integer, primary_key=True),
-        sa.Column('name', sa.String(50), nullable=False),
-        sa.Column('description', sa.Unicode(200)),
+        'users',
+        sa.Column('id', sa.Integer, primary_key=True,unique=True),
+        sa.Column('username', sa.String(100), unique=True),
+        sa.Column('hashed_password', sa.String(100)),
+        sa.Column('email', sa.String(200)),
+        sa.Column('enabled', sa.Boolean),
+        sa.Column('created_at', sa.DateTime)
     )
 
 def downgrade():
-    op.drop_table('account')
+    op.drop_table('users')
