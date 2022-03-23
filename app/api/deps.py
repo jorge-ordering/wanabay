@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, List
 from app.models.user import User
 
 from fastapi import Depends, HTTPException, status
@@ -32,13 +32,13 @@ def get_current_user(
         payload = jwt.decode(
             token, security.SECRET_KEY, algorithms=[security.ALGORITHM]
         )
-        token_data = schemas.TokenPayload(**payload)
+        token_data = schemas.token.TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    user = crud.user.get(db, id=token_data.sub)
+    user = cruds.user.user.get(db, id=token_data.sub)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -59,4 +59,15 @@ def get_current_active_superuser(
     #     raise HTTPException(
     #         status_code=400, detail="The user doesn't have enough privileges"
     #     )
+    return current_user
+
+def get_current_permisions (
+    roles: List[str] = [],
+    current_user: models.user.User = Depends(get_current_user),
+) -> str:
+    if not "admin" in roles:
+        pass
+        raise HTTPException(
+            status_code=401, detail="The user doesn't have enough privileges"
+        )
     return current_user

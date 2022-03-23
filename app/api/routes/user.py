@@ -25,7 +25,8 @@ def read_users(
     """
     Retrieve users.
     """
-    users = cruds.user.get_multi(db, skip=skip, limit=limit)
+    deps.get_current_permisions(roles=['admin'])
+    users = cruds.user.user.get_multi(db, skip=skip, limit=limit)
     return users
 
 
